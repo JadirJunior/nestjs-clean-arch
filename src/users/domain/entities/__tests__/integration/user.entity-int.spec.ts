@@ -106,4 +106,44 @@ describe('UserEntity Integration Tests', () => {
       new UserEntity(props)
     })
   })
+
+  describe('Update name method', () => {
+    it('Should throw an error when update a user with invalid name', () => {
+      const entity = new UserEntity(UserDataBuilder({}))
+
+      expect(() => entity.update(null)).toThrow(EntityValidationError)
+      expect(() => entity.update('')).toThrow(EntityValidationError)
+      expect(() => entity.update(10 as any)).toThrow(EntityValidationError)
+      expect(() => entity.update('a'.repeat(256))).toThrow(
+        EntityValidationError,
+      )
+    })
+
+    it('Should a valid user', () => {
+      expect.assertions(0)
+      const entity = new UserEntity(UserDataBuilder({}))
+      entity.update('Other name')
+    })
+  })
+
+  describe('Update password method', () => {
+    it('Should throw an error when update a user with invalid password', () => {
+      const entity = new UserEntity(UserDataBuilder({}))
+
+      expect(() => entity.updatePassword(null)).toThrow(EntityValidationError)
+      expect(() => entity.updatePassword('')).toThrow(EntityValidationError)
+      expect(() => entity.updatePassword(10 as any)).toThrow(
+        EntityValidationError,
+      )
+      expect(() => entity.updatePassword('a'.repeat(101))).toThrow(
+        EntityValidationError,
+      )
+    })
+
+    it('Should a valid user', () => {
+      expect.assertions(0)
+      const entity = new UserEntity(UserDataBuilder({}))
+      entity.updatePassword('Other password')
+    })
+  })
 })
