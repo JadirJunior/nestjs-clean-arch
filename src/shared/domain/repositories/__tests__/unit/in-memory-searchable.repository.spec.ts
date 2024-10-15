@@ -30,7 +30,43 @@ describe('InMemoryRepository Unit Tests', () => {
   })
 
   describe('applyFilter method', () => {
-    it('', () => {})
+    it('should no filter items when filter param is null', async () => {
+      const items = [new StubEntity({ name: 'name value', price: 50 })]
+      const spyFilterMethod = jest.spyOn(items, 'filter')
+      const itemsFiltered = await sut['applyFilter'](items, null)
+      expect(itemsFiltered).toStrictEqual(items)
+      expect(spyFilterMethod).not.toHaveBeenCalled()
+    })
+
+    it('should filter using a filter param', async () => {
+      const items = [
+        new StubEntity({ name: 'teste', price: 50 }),
+        new StubEntity({ name: 'TEST', price: 50 }),
+        new StubEntity({ name: 'Test', price: 50 }),
+        new StubEntity({ name: 'fake', price: 50 }),
+      ]
+
+      const spyFilterMethod = jest.spyOn(items, 'filter')
+      let itemsFiltered = await sut['applyFilter'](items, 'test')
+      expect(itemsFiltered).toStrictEqual([items[0], items[1], items[2]])
+      expect(spyFilterMethod).toHaveBeenCalledTimes(1)
+
+      itemsFiltered = await sut['applyFilter'](items, 'Test')
+      expect(itemsFiltered).toStrictEqual([items[0], items[1], items[2]])
+      expect(spyFilterMethod).toHaveBeenCalledTimes(2)
+
+      itemsFiltered = await sut['applyFilter'](items, 'TEST')
+      expect(itemsFiltered).toStrictEqual([items[0], items[1], items[2]])
+      expect(spyFilterMethod).toHaveBeenCalledTimes(3)
+
+      itemsFiltered = await sut['applyFilter'](items, 'TES')
+      expect(itemsFiltered).toStrictEqual([items[0], items[1], items[2]])
+      expect(spyFilterMethod).toHaveBeenCalledTimes(4)
+
+      itemsFiltered = await sut['applyFilter'](items, 'no-filter')
+      expect(itemsFiltered).toStrictEqual([])
+      expect(spyFilterMethod).toHaveBeenCalledTimes(5)
+    })
   })
   describe('applySort method', () => {})
   describe('applyPaginate method', () => {})
