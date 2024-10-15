@@ -1,4 +1,7 @@
-import { SearchParams } from '../../searchable-repositories-contract'
+import {
+  SearchParams,
+  SearchResult,
+} from '../../searchable-repositories-contract'
 
 describe('Searchable Repository unit tests', () => {
   describe('SearchParams tests', () => {
@@ -129,6 +132,76 @@ describe('Searchable Repository unit tests', () => {
       params.forEach(({ filter, expected }) => {
         expect(new SearchParams({ filter: filter }).filter).toBe(expected)
       })
+    })
+  })
+
+  describe('SearchResult unit tests', () => {
+    it('Constructor props', () => {
+      let sut = new SearchResult({
+        items: ['item1', 'item2', 'item3', 'item4'] as any,
+        total: 4,
+        currentPage: 1,
+        perPage: 2,
+        sort: null,
+        sortDir: null,
+        filter: null,
+      })
+
+      expect(sut.toJSON()).toStrictEqual({
+        items: ['item1', 'item2', 'item3', 'item4'] as any,
+        total: 4,
+        currentPage: 1,
+        perPage: 2,
+        lastPage: 2,
+        sort: null,
+        sortDir: null,
+        filter: null,
+      })
+
+      sut = new SearchResult({
+        items: ['item1', 'item2', 'item3', 'item4'] as any,
+        total: 4,
+        currentPage: 1,
+        perPage: 2,
+        sort: 'name',
+        sortDir: 'asc',
+        filter: 'teste',
+      })
+
+      expect(sut.toJSON()).toStrictEqual({
+        items: ['item1', 'item2', 'item3', 'item4'] as any,
+        total: 4,
+        currentPage: 1,
+        perPage: 2,
+        lastPage: 2,
+        sort: 'name',
+        sortDir: 'asc',
+        filter: 'teste',
+      })
+
+      sut = new SearchResult({
+        items: ['item1', 'item2', 'item3', 'item4'] as any,
+        total: 4,
+        currentPage: 1,
+        perPage: 10,
+        sort: 'name',
+        sortDir: 'asc',
+        filter: 'teste',
+      })
+
+      expect(sut.lastPage).toBe(1)
+
+      sut = new SearchResult({
+        items: ['item1', 'item2', 'item3', 'item4'] as any,
+        total: 54,
+        currentPage: 1,
+        perPage: 10,
+        sort: 'name',
+        sortDir: 'asc',
+        filter: 'teste',
+      })
+
+      expect(sut.lastPage).toBe(6)
     })
   })
 })
