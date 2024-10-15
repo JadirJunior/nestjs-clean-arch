@@ -17,7 +17,7 @@ export type SearchResultProps<E extends Entity, Filter> = {
   currentPage: number
   perPage: number
   sort: string | null
-  sortDir: SortDirection | null
+  sortDir: string | null
   filter: Filter | null
 }
 
@@ -107,7 +107,7 @@ export class SearchResult<E extends Entity, Filter = string> {
   readonly perPage: number
   readonly lastPage: number
   readonly sort: string | null
-  readonly sortDir: SortDirection | null
+  readonly sortDir: string | null
   readonly filter: Filter | null
 
   constructor(props: SearchResultProps<E, Filter>) {
