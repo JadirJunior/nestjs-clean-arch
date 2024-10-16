@@ -1,5 +1,9 @@
 import { Entity } from '@/shared/domain/entities/entity'
 import { InMemorySearchableRepository } from '../../in-memory-searchable.repository '
+import {
+  SearchParams,
+  SearchResult,
+} from '../../searchable-repositories-contract'
 
 type StubEntityProps = {
   name: string
@@ -122,5 +126,74 @@ describe('InMemoryRepository Unit Tests', () => {
       expect(itemsPaginated).toStrictEqual([])
     })
   })
-  describe('search method', () => {})
+  describe('search method', () => {
+    it('should apply only pagination when the other params are null', async () => {
+      const entity = new StubEntity({ name: 'test', price: 50 })
+      const items = Array(16).fill(entity)
+      sut.items = items
+
+      const params = await sut.search(new SearchParams())
+      expect(params).toStrictEqual(
+        new SearchResult({
+          items: Array(15).fill(entity),
+          total: 16,
+          currentPage: 1,
+          perPage: 15,
+          sort: null,
+          sortDir: null,
+          filter: null,
+        }),
+      )
+    })
+
+    it('should apply paginate and filter', async () => {
+      const items = [
+        new StubEntity({ name: 'test', price: 50 }),
+        new StubEntity({ name: 'a', price: 100 }),
+        new StubEntity({ name: 'TEST', price: 30 }),
+        new StubEntity({ name: 'TeStE', price: 30 }),
+      ]
+      sut.items = items
+
+      let params = await sut.search(
+        new SearchParams({
+          filter: 'test',
+          page: 1,
+          perPage: 2,
+        }),
+      )
+
+      expect(params).toStrictEqual(
+        new SearchResult({
+          items: [items[0], items[2]],
+          total: 3,
+          currentPage: 1,
+          perPage: 2,
+          sort: null,
+          sortDir: null,
+          filter: 'test',
+        }),
+      )
+
+      params = await sut.search(
+        new SearchParams({
+          filter: 'test',
+          page: 2,
+          perPage: 2,
+        }),
+      )
+
+      expect(params).toStrictEqual(
+        new SearchResult({
+          items: [items[3]],
+          total: 3,
+          currentPage: 2,
+          perPage: 2,
+          sort: null,
+          sortDir: null,
+          filter: 'test',
+        }),
+      )
+    })
+  })
 })

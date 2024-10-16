@@ -4,7 +4,6 @@ import {
   SearchableRepositoryInterface,
   SearchParams,
   SearchResult,
-  SortDirection,
 } from './searchable-repositories-contract'
 
 export abstract class InMemorySearchableRepository<E extends Entity>
