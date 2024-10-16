@@ -1,5 +1,5 @@
 import { Entity } from '@/shared/domain/entities/entity'
-import { InMemorySearchableRepository } from '../../in-memory-searchable.repository '
+import { InMemorySearchableRepository } from '../../in-memory-searchable.repository'
 import {
   SearchParams,
   SearchResult,
