@@ -18,7 +18,7 @@ export namespace SignupUseCase {
     createdAt: Date
   }
 
-  export class SignupUseCase {
+  export class UseCase {
     //Injeção de dependência
     constructor(
       private userRepository: UserRepository.Repository,

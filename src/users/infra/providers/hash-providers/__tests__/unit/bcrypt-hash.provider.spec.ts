@@ -1,6 +1,6 @@
 import { BcryptHashProvider } from '../../bcrypt-hash.provider'
 
-describe('UserInMemoryRepository Unit Tests', () => {
+describe('BcryptHashProvider Unit Tests', () => {
   let sut: BcryptHashProvider
 
   beforeEach(() => {
