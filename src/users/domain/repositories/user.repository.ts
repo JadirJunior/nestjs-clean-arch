@@ -5,7 +5,6 @@ import {
   SearchableRepositoryInterface,
 } from '@/shared/domain/repositories/searchable-repositories-contract'
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace UserRepository {
   export type Filter = string
 
