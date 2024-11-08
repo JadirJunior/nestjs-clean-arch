@@ -6,6 +6,7 @@ import { DatabaseModule } from '@/shared/infra/database/database.module'
 import { NotFoundError } from '@/shared/domain/errors/not-found-error'
 import { UserEntity } from '@/users/domain/entities/user.entity'
 import { UserDataBuilder } from '@/users/domain/testing/helpers/user-data-builder'
+import { UserModelMapper } from '../../../models/user-model.mapper'
 
 describe('UserPrismaRepository integration tests', () => {
   const prismaService = new PrismaClient()
@@ -56,5 +57,17 @@ describe('UserPrismaRepository integration tests', () => {
     })
 
     expect(data).toStrictEqual(entity.toJson())
+  })
+
+  it('should return all users', async () => {
+    const entity = new UserEntity(UserDataBuilder({}))
+
+    const newUser = await prismaService.user.create({
+      data: entity.toJson(),
+    })
+
+    const entities = await sut.findAll()
+    expect(entities).toHaveLength(1)
+    expect(entities).toStrictEqual([UserModelMapper.toEntity(newUser)])
   })
 })
