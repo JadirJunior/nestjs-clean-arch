@@ -40,6 +40,7 @@ export class UserPrismaRepository implements UserRepository.Repository {
         where: {
           name: {
             contains: props.filter,
+            mode: 'insensitive',
           },
         },
       }),
