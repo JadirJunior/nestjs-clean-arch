@@ -94,12 +94,18 @@ describe('UserPrismaRepository integration tests', () => {
 
       const searchOutput = await sut.search(new UserRepository.SearchParams({}))
 
+      const items = searchOutput.items
+
       expect(searchOutput).toBeInstanceOf(UserRepository.SearchResult)
       expect(searchOutput.total).toBe(16)
       searchOutput.items.forEach(item => {
         expect(item).toBeInstanceOf(UserEntity)
       })
       expect(searchOutput.items).toHaveLength(15)
+
+      items.reverse().forEach((item, index) => {
+        expect(`test${index + 1}@gmail.com`).toBe(item.email)
+      })
     })
   })
 })
